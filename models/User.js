@@ -7,6 +7,9 @@ const userSchema = new Schema(
         },
         pseudo: {
             type: String
+        },
+        roomsName: {
+            type: [String]
         }
     },
     {

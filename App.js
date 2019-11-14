@@ -1,35 +1,40 @@
-//Require the express moule
 const express = require("express");
-
-//create a new express application
 const app = express()
-
-//require the http module
 const http = require("http").Server(app)
-
-// require the socket.io module
 const io = require("socket.io");
+const mongoose = require("mongoose");
+const bodyParser  = require("body-parser");
+const cors = require("cors") 
 
 const port = 4001;
 
 const socket = io(http);
-//create an event listener
-const Chat = require("./models/Chat");
+
+// DataBase connection
+const url = "mongodb://localhost:27017/chat";
+const connect = mongoose.connect(url, { useNewUrlParser: true });
+const db = mongoose.connection
+db.on('error', (error) => console.error(error))
+db.once('open', () => console.log('connected to database'))
+
+// Middleware
+app.use(bodyParser.json());
+app.use(cors());
+app.use(express.json());
+
+// Routes
+const messageRouter  = require("./routes/messages");
+const roomRouter = require("./routes/rooms");
+const userRouter = require("./routes/users");
+app.use("/messages", messageRouter);
+app.use("/rooms", roomRouter);
+app.use("/users", userRouter);
+
+// Models
+const Message = require("./models/Message");
 const User = require("./models/User");
 const Room = require("./models/Room");
 
-const connect = require("./dbconnect");
-
-const bodyParser  = require("body-parser");
-const chatRouter  = require("./routes/chats");
-const cors = require("cors") 
-//bodyparser middleware
-app.use(bodyParser.json());
-app.use(cors())
-//routes
-app.use("/chats", chatRouter);
-
-//setup event listener
 socket.on("connection", socket => {
     console.log("user connected");
     socket.on("disconnect", function () {
@@ -44,7 +49,7 @@ socket.on("connection", socket => {
         connect.then(db => {
             console.log("connected correctly to the server");
 
-            let chatMessage = new Chat({ message: msg, sender: "Anonymous" });
+            let chatMessage = new Message({ message: msg, sender: "Anonymous" });
             chatMessage.save();
         });
     });

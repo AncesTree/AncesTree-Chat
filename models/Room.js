@@ -1,17 +1,17 @@
 const mongoose = require("mongoose");
-const User = require("./User");
-const Chat = require("./Chat");
+const User = require("./User").model("User").schema;
+const Message = require("./Message").model("Message").schema;
 const Schema = mongoose.Schema;
 const roomSchema = new Schema(
     {
-        id : {
-            type: Number
+        name: {
+            type: String
         },
         users: {
             type: [User]
         },
         messages: {
-            type: [Chat]
+            type: [Message]
         }
     },
     {
