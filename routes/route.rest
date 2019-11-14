@@ -1,0 +1,100 @@
+### ######## ###
+### MESSAGES ###
+### ######## ###
+
+GET http://localhost:4001/messages
+
+###
+
+GET http://localhost:4001/messages/5dcdd8f3c8d16e5756100644
+
+###
+
+POST http://localhost:4001/messages
+Content-Type: application/json
+
+{
+  "message": "a message, a good one",
+  "sender": "Paul"
+}
+
+###
+
+PATCH http://localhost:4001/messages/5dcdd8f3c8d16e5756100644
+Content-Type: application/json 
+
+{
+  "message": "a modified message, a very good one"
+}
+
+###
+
+DELETE http://localhost:4001/messages/5dcdd8f3c8d16e5756100644
+
+### ##### ###
+### ROOMS ###
+### ##### ###
+
+GET http://localhost:4001/rooms
+
+###
+
+GET http://localhost:4001/rooms/5dcdddc765c28a60c69f630c
+
+###
+
+POST http://localhost:4001/rooms
+Content-Type: application/json
+
+{
+  "name": "First room ever",
+  "users": [],
+  "messages": []
+}
+
+###
+
+PATCH http://localhost:4001/rooms/5dcdddc765c28a60c69f630c
+Content-Type: application/json 
+
+{
+  "name": "First room modified ever"
+}
+
+###
+
+DELETE http://localhost:4001/rooms/5dcdddc765c28a60c69f630c
+
+### ##### ###
+### USERS ###
+### ##### ###
+
+GET http://localhost:4001/users
+
+###
+
+GET http://localhost:4001/users/5dcde09ef4acf4631d45cc9b
+
+###
+
+POST http://localhost:4001/users
+Content-Type: application/json
+
+{
+  "name": "Paul",
+  "pseudo": "Polux",
+  "roomsName": ["Perso", "Classe"]
+}
+
+###
+
+PATCH http://localhost:4001/users/5dcde09ef4acf4631d45cc9b
+Content-Type: application/json 
+
+{
+  "pseudo": "Better modified pseudo"
+}
+
+###
+
+DELETE http://localhost:4001/users/
