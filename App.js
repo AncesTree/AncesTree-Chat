@@ -3,8 +3,8 @@ const app = express()
 const http = require("http").Server(app)
 const io = require("socket.io");
 const mongoose = require("mongoose");
-const bodyParser  = require("body-parser");
-const cors = require("cors") 
+const bodyParser = require("body-parser");
+const cors = require("cors")
 
 const port = 4001;
 
@@ -23,7 +23,7 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-const messageRouter  = require("./routes/messages");
+const messageRouter = require("./routes/messages");
 const roomRouter = require("./routes/rooms");
 const userRouter = require("./routes/users");
 app.use("/messages", messageRouter);
@@ -37,23 +37,29 @@ const Room = require("./models/Room");
 
 socket.on("connection", socket => {
     console.log("user connected");
-    socket.on("disconnect", function () {
+    socket.on("disconnection", function () {
         console.log("user disconnected");
     });
-    socket.on("chat message", function (msg) {
-        console.log("message: " + msg);
-        //broadcast message to everyone in port:5000 except yourself.
-        socket.broadcast.emit("received", { message: msg });
+    socket.on("message sended", function (msg) {
+        console.log(msg.sender + " " + msg.message + " " + msg.room);
+        const room = msg.room;
+        const sender = msg.sender;
+        const message = msg.message;
 
-        //save chat to the database
-        connect.then(db => {
-            console.log("connected correctly to the server");
+        socket.broadcast.emit(room, { message: message, sender: sender });
 
-            let chatMessage = new Message({ message: msg, sender: "Anonymous" });
-            chatMessage.save();
+        let chatMessage = new Message({ message: msg.message, sender: sender });
+        chatMessage.save();
+
+        Room.findOne({ "name": room }, (err, result) => {
+            if (err) throw err;
+            result.messages.push(chatMessage)
+            result.save();
         });
     });
 });
+// https://www.freecodecamp.org/news/how-to-create-a-realtime-app-using-socket-io-react-node-mongodb-a10c4a1ab676/
+// https://amritb.github.io/socketio-client-tool/
 
 //wire up the server to listen to our port 500
 http.listen(port, () => {

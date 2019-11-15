@@ -39,7 +39,7 @@ GET http://localhost:4001/rooms
 
 ###
 
-GET http://localhost:4001/rooms/5dcdddc765c28a60c69f630c
+GET http://localhost:4001/rooms/5dcea377a15ff41f5c3a1540
 
 ###
 
@@ -47,14 +47,14 @@ POST http://localhost:4001/rooms
 Content-Type: application/json
 
 {
-  "name": "First room ever",
+  "name": "first room",
   "users": [],
   "messages": []
 }
 
 ###
 
-PATCH http://localhost:4001/rooms/5dcdddc765c28a60c69f630c
+PATCH http://localhost:4001/rooms/5dcea377a15ff41f5c3a1540
 Content-Type: application/json 
 
 {
@@ -63,7 +63,7 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:4001/rooms/5dcdddc765c28a60c69f630c
+DELETE http://localhost:4001/rooms/5dcecfd3128bc418aeb09cfc
 
 ### ##### ###
 ### USERS ###
