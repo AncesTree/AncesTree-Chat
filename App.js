@@ -36,7 +36,8 @@ const User = require("./models/User");
 const Room = require("./models/Room");
 
 socket.on("connection", socket => {
-    console.log("user connected");
+    const { id } = socket.client;
+    console.log(`User connected : ${id}`);
     socket.on("disconnection", function () {
         console.log("user disconnected");
     });
