@@ -39,24 +39,22 @@ socket.on("connection", socket => {
     const { id } = socket.client;
     console.log(`User connected : ${id}`);
     socket.on("disconnection", function () {
-        console.log("user disconnected");
+        console.log("User disconnected");
     });
-    socket.on("message sended", function (msg) {
-        console.log(msg.sender + " " + msg.message + " " + msg.room);
-        const room = msg.room;
-        const sender = msg.sender;
-        const message = msg.message;
+    socket.on("chat message", function (msg) {
+        const message = { message: msg.message, sender: msg.sender }
+        socket.broadcast.emit(room, message);
 
-        socket.broadcast.emit(room, { message: message, sender: sender });
-
-        let chatMessage = new Message({ message: msg.message, sender: sender });
+        let chatMessage = new Message(message);
         chatMessage.save();
+        Room.findById(msg.room)
+            .then(
+                result => {
+                    result.messages.push(chatMessage._id);
+                    result.save();
+                }
+            )
 
-        Room.findOne({ "name": room }, (err, result) => {
-            if (err) throw err;
-            result.messages.push(chatMessage)
-            result.save();
-        });
     });
 });
 // https://www.freecodecamp.org/news/how-to-create-a-realtime-app-using-socket-io-react-node-mongodb-a10c4a1ab676/
