@@ -47,18 +47,18 @@ POST http://localhost:4001/rooms
 Content-Type: application/json
 
 {
-  "name": "first room",
+  "name": "Room 1",
   "users": [],
   "messages": []
 }
 
 ###
 
-PATCH http://localhost:4001/rooms/5dcea377a15ff41f5c3a1540
+PATCH http://localhost:4001/rooms/5dd00fcce784d1168e3f1cf4
 Content-Type: application/json 
 
 {
-  "name": "First room modified ever"
+  "users": ["5dd015790a792e19ae646734"]
 }
 
 ###
@@ -83,18 +83,21 @@ Content-Type: application/json
 {
   "name": "Paul",
   "pseudo": "Polux",
-  "roomsName": ["Perso", "Classe"]
+  "rooms": []
 }
 
 ###
 
-PATCH http://localhost:4001/users/5dcfbc6a2372e42b1c3ca228
+PATCH http://localhost:4001/users/5dd015790a792e19ae646734
 Content-Type: application/json 
 
 {
-  "pseudo": "Better two modified pseudo"
+  "rooms": ["5dd00fcce784d1168e3f1cf4"]
 }
 
 ###
 
-DELETE http://localhost:4001/users/5dcfbc6a2372e42b1c3ca228
+DELETE http://localhost:4001/users/5dd014c70a792e19ae646733
+
+###
+GET http://localhost:4001/users/rooms/5dd015790a792e19ae646734
