@@ -6,7 +6,8 @@ const messageSchema = new Schema(
             type: String
         },
         sender: {
-            type: String
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
         }
     },
     {
