@@ -65,9 +65,11 @@ router.delete('/:id', getRoom, async (req, res) => {
 
 router.get("/messages/:id", getRoom, async (req, res) => {
     try {
-        await Room.findById(req.params.id).populate("rooms").populate("users").populate("sender").exec( (err, messages) => {
-            res.json(messages)
-        })
+        await Room.findById(req.params.id)
+            .populate({ path: 'messages users', populate: { path: 'sender' } })
+            .exec((err, messages) => {
+                res.json(messages)
+            })
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
