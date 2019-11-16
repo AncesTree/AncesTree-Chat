@@ -73,7 +73,7 @@ GET http://localhost:4001/users
 
 ###
 
-GET http://localhost:4001/users/5dcde09ef4acf4631d45cc9b
+GET http://localhost:4001/users/5dcfbc6a2372e42b1c3ca228
 
 ###
 
@@ -88,13 +88,13 @@ Content-Type: application/json
 
 ###
 
-PATCH http://localhost:4001/users/5dcde09ef4acf4631d45cc9b
+PATCH http://localhost:4001/users/5dcfbc6a2372e42b1c3ca228
 Content-Type: application/json 
 
 {
-  "pseudo": "Better modified pseudo"
+  "pseudo": "Better two modified pseudo"
 }
 
 ###
 
-DELETE http://localhost:4001/users/
+DELETE http://localhost:4001/users/5dcfbc6a2372e42b1c3ca228
