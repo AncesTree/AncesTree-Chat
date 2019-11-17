@@ -43,7 +43,7 @@ socket.on("connection", socket => {
     });
     socket.on("chat message", function (msg) {
         const message = { message: msg.message, sender: msg.sender }
-        socket.broadcast.emit(room, message);
+        socket.broadcast.emit(msg.room, message);
 
         let chatMessage = new Message(message);
         chatMessage.save();
