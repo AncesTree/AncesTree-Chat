@@ -65,36 +65,24 @@ const User = require("./models/User");
 const Room = require("./models/Room");
 
 socket.on("connection", socket => {
-  const {
-    id
-  } = socket.client;
-  console.log(`User connected : ${id}`);
-  socket.on("disconnection", function() {
-    console.log("user disconnected");
-  });
-  socket.on("message sended", function(msg) {
-    console.log(msg.sender + " " + msg.message + " " + msg.room);
-    const room = msg.room;
-    const sender = msg.sender;
-    const message = msg.message;
-
-    socket.broadcast.emit(room, {
-      message: message,
-      sender: sender
+    const { id } = socket.client;
+    console.log(`User connected : ${id}`);
+    socket.on("disconnection", function () {
+        console.log("User disconnected");
     });
+    socket.on("chat message", function (msg) {
+        const message = { message: msg.message, sender: msg.sender }
+        socket.broadcast.emit(msg.room, message);
 
-    let chatMessage = new Message({
-      message: msg.message,
-      sender: sender
-    });
-    chatMessage.save();
-
-    Room.findOne({
-      "name": room
-    }, (err, result) => {
-      if (err) throw err;
-      result.messages.push(chatMessage)
-      result.save();
+        let chatMessage = new Message(message);
+        chatMessage.save();
+        Room.findById(msg.room)
+            .then(
+                result => {
+                    result.messages.push(chatMessage._id);
+                    result.save();
+                }
+            )
     });
   });
 });

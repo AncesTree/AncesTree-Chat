@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
     const user = new User({
         name: req.body.name,
         pseudo: req.body.pseudo,
-        roomsName: req.body.roomsName
+        rooms: req.body.rooms
     });
     try {
         const newuser = await user.save();
@@ -42,8 +42,8 @@ router.patch('/:id', getUser, async (req, res) => {
         res.user.pseudo = req.body.pseudo
     }
 
-    if (req.body.roomsName != null) {
-        res.user.roomsName = req.body.roomsName
+    if (req.body.rooms != null) {
+        res.user.rooms = req.body.rooms
     }
 
     try {
@@ -59,6 +59,16 @@ router.delete('/:id', getUser, async (req, res) => {
     try {
         await res.user.remove()
         res.json({ message: 'Deleted This User' })
+    } catch (err) {
+        res.status(500).json({ message: err.message })
+    }
+})
+
+router.get("/rooms/:id", getUser, async (req, res) => {
+    try {
+        await User.findById(req.params.id).populate("rooms").exec( (err, rooms) => {
+            res.json(rooms)
+        })
     } catch (err) {
         res.status(500).json({ message: err.message })
     }

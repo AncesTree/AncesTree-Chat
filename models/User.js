@@ -8,7 +8,7 @@ const userSchema = new Schema(
         pseudo: {
             type: String
         },
-        roomsName: {
+        rooms: {
             type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Room' }]
         }
     },
