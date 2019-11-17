@@ -5,22 +5,51 @@ const io = require("socket.io");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors")
-
-const port = 4001;
+const axios = require("axios")
+require('dotenv').config()
+const port = 3000;
 
 const socket = io(http);
 
 // DataBase connection
-const url = "mongodb://localhost:27017/chat";
-const connect = mongoose.connect(url, { useNewUrlParser: true });
+const url = process.env.MONGO_DB;
+const connect = mongoose.connect(url, {
+  useNewUrlParser: true
+});
 const db = mongoose.connection
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.log('connected to database'))
 
 // Middleware
-app.use(bodyParser.json());
 app.use(cors());
+app.use(bodyParser.json());
 app.use(express.json());
+
+app.use(function(req, res, next) {
+  if (process.env.ENV != 'DEV') {
+    if (!req.headers.authorization) {
+      res.status(403).send('Unauthorized')
+    }
+    let token = req.headers.authorization;
+    if (token === 'null') {
+      res.status(403).send('Unauthorized')
+    }
+    axios.get('https://ancestree-auth.igpolytech.fr/auth/checktoken', {
+        headers: {
+          Authorization: token
+        }
+      })
+      .then((result) => {
+        if (result.status === 200) {
+          next()
+        } else {
+          res.status(403).send('Unauthorized')
+        }
+      })
+  } else {
+    next()
+  }
+})
 
 // Routes
 const messageRouter = require("./routes/messages");
@@ -54,13 +83,13 @@ socket.on("connection", socket => {
                     result.save();
                 }
             )
-
     });
+  });
 });
 // https://www.freecodecamp.org/news/how-to-create-a-realtime-app-using-socket-io-react-node-mongodb-a10c4a1ab676/
 // https://amritb.github.io/socketio-client-tool/
 
 //wire up the server to listen to our port 500
 http.listen(port, () => {
-    console.log("connected to port: " + port)
+  console.log("connected to port: " + port)
 });

@@ -1,3 +1,9 @@
 /node_modules
 package-lock.json
 /routes/*.rest
+.env
+
+# Credentials
+.travis/*.key
+.travis/*.key.pub
+.idea
