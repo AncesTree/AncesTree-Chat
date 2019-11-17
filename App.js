@@ -65,30 +65,95 @@ const User = require("./models/User");
 const Room = require("./models/Room");
 
 socket.on("connection", socket => {
-  const { id } = socket.client;
-  console.log(`User connected : ${id}`);
+  console.log(`User connected : ${socket.client}`);
+
   socket.on("disconnection", function () {
     console.log("User disconnected");
   });
+
   socket.on("chat message", function (msg) {
     const message = { message: msg.message, sender: msg.sender }
     socket.broadcast.emit(msg.room, message);
 
     let chatMessage = new Message(message);
     chatMessage.save();
+
     Room.findById(msg.room)
       .then(
         result => {
           result.messages.push(chatMessage._id);
           result.save();
         }
-      )
+      );
   });
-});
-// https://www.freecodecamp.org/news/how-to-create-a-realtime-app-using-socket-io-react-node-mongodb-a10c4a1ab676/
-// https://amritb.github.io/socketio-client-tool/
 
-//wire up the server to listen to our port 500
+  socket.on("user added in room", (msg) => {
+    const userToAdd = msg.user;
+    const roomToUpdate = msg.room;
+
+    Room.findById(roomToUpdate)
+      .then(
+        result => {
+          result.users.push(userToAdd);
+          result.save();
+        }
+      );
+
+    User.findById(userToAdd)
+      .then(
+        result => {
+          result.rooms.push(roomToUpdate);
+          result.save();
+        }
+      )
+
+    socket.emit(userToAdd, "You have been added to a conversation");
+    socket.emit(roomToUpdate, { message: `I add a user`, sender: actingUser});
+
+  });
+
+  socket.on("user removed from room", (msg) => {
+    const userToRemove = msg.user;
+    const roomToUpdate = msg.room;
+    const actingUser = msg.actingUser;
+
+    Room.findById(roomToUpdate)
+      .then(
+        result => {
+          result.users = result.users.filter(user => user != userToRemove);
+          result.save();
+        }
+      );
+
+    User.findById(userToRemove)
+      .then(
+        result => {
+          result.rooms = result.rooms.filter(room => room != roomToUpdate);
+          result.save();
+        }
+      );
+
+    socket.emit(userToRemove, "You have been removed from a conversation");
+    socket.emit(roomToUpdate, { message: `I remove a user`, sender: actingUser});
+
+  });
+
+  socket.on("message removed from room", (msg) => {
+    const messageToRemove = msg.message;
+    const roomToUpdate = msg.room;
+
+    Room.findById(roomToUpdate)
+      .then(
+        result => {
+          result.messages = result.messages.filter(message => message != messageToRemove);
+          result.save();
+        }
+      );
+
+  });
+
+});
+
 http.listen(port, () => {
   console.log("connected to port: " + port)
 });
