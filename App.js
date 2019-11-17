@@ -25,7 +25,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   if (process.env.ENV != 'DEV') {
     if (!req.headers.authorization) {
       res.status(403).send('Unauthorized')
@@ -35,10 +35,10 @@ app.use(function(req, res, next) {
       res.status(403).send('Unauthorized')
     }
     axios.get('https://ancestree-auth.igpolytech.fr/auth/checktoken', {
-        headers: {
-          Authorization: token
-        }
-      })
+      headers: {
+        Authorization: token
+      }
+    })
       .then((result) => {
         if (result.status === 200) {
           next()
@@ -65,25 +65,24 @@ const User = require("./models/User");
 const Room = require("./models/Room");
 
 socket.on("connection", socket => {
-    const { id } = socket.client;
-    console.log(`User connected : ${id}`);
-    socket.on("disconnection", function () {
-        console.log("User disconnected");
-    });
-    socket.on("chat message", function (msg) {
-        const message = { message: msg.message, sender: msg.sender }
-        socket.broadcast.emit(msg.room, message);
+  const { id } = socket.client;
+  console.log(`User connected : ${id}`);
+  socket.on("disconnection", function () {
+    console.log("User disconnected");
+  });
+  socket.on("chat message", function (msg) {
+    const message = { message: msg.message, sender: msg.sender }
+    socket.broadcast.emit(msg.room, message);
 
-        let chatMessage = new Message(message);
-        chatMessage.save();
-        Room.findById(msg.room)
-            .then(
-                result => {
-                    result.messages.push(chatMessage._id);
-                    result.save();
-                }
-            )
-    });
+    let chatMessage = new Message(message);
+    chatMessage.save();
+    Room.findById(msg.room)
+      .then(
+        result => {
+          result.messages.push(chatMessage._id);
+          result.save();
+        }
+      )
   });
 });
 // https://www.freecodecamp.org/news/how-to-create-a-realtime-app-using-socket-io-react-node-mongodb-a10c4a1ab676/
