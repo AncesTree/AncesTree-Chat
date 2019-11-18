@@ -6,10 +6,10 @@ const roomSchema = new Schema(
             type: String
         },
         users: {
-            type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+            type: [{ type: String, ref: 'User' }]
         },
         messages: {
-            type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }]
+            type: [{ type: Schema.Types.ObjectId, ref: 'Message' }]
         }
     },
     {

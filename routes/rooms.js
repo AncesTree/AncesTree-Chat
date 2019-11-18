@@ -48,7 +48,7 @@ router.patch('/:id', getRoom, async (req, res) => {
     try {
         const updatedRoom = await res.room.save()
         res.json(updatedRoom)
-    } catch {
+    } catch (err) {
         res.status(400).json({ message: err.message })
     }
 })
@@ -63,12 +63,12 @@ router.delete('/:id', getRoom, async (req, res) => {
     }
 })
 
-router.get("/messages/:id", getRoom, async (req, res) => {
+router.get("/populate/:id", getRoom, async (req, res) => {
     try {
         await Room.findById(req.params.id)
             .populate({ path: 'messages users', populate: { path: 'sender' } })
-            .exec((err, messages) => {
-                res.json(messages)
+            .exec((err, room) => {
+                res.json(room)
             })
     } catch (err) {
         res.status(500).json({ message: err.message })
@@ -84,7 +84,9 @@ async function getRoom(req, res, next) {
     } catch (err) {
         return res.status(500).json({ message: err.message })
     }
-
+    if (!room.users.includes(req.body.id)) {
+        return res.status(403).json({ message: err.message })
+    }
     res.room = room
     next()
 }

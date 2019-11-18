@@ -20,8 +20,9 @@ router.get('/:id', getUser, (req, res) => {
 // Create one user
 router.post('/', async (req, res) => {
     const user = new User({
-        name: req.body.name,
-        pseudo: req.body.pseudo,
+        _id: req.body.id,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
         rooms: req.body.rooms
     });
     try {
@@ -34,12 +35,12 @@ router.post('/', async (req, res) => {
 
 // Update one user
 router.patch('/:id', getUser, async (req, res) => {
-    if (req.body.name != null) {
-        res.user.name = req.body.name
+    if (req.body.firstName != null) {
+        res.user.firstName = req.body.firstName
     }
 
-    if (req.body.pseudo != null) {
-        res.user.pseudo = req.body.pseudo
+    if (req.body.lastName != null) {
+        res.user.lastName = req.body.lastName
     }
 
     if (req.body.rooms != null) {

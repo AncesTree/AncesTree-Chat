@@ -17,6 +17,7 @@ const connect = mongoose.connect(url, {
   useNewUrlParser: true
 });
 const db = mongoose.connection
+//db.dropDatabase();
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.log('connected to database'))
 
@@ -65,13 +66,28 @@ const User = require("./models/User");
 const Room = require("./models/Room");
 
 socket.on("connection", socket => {
-  console.log(`User connected : ${socket.client}`);
+  const {id} = socket.client;
+  console.log(`User connected : ${id}`);
 
   socket.on("disconnection", function () {
     console.log("User disconnected");
   });
 
-  socket.on("chat message", function (msg) {
+  socket.on("User connected", (msg) => {
+    const userId = msg.userId;
+
+    User.findById(userId)
+      .then(
+        result => {
+          if (result == null) {
+            const newUser = {}
+          }
+        }
+        
+      )
+  })
+
+  socket.on("chat message", (msg) => {
     const message = { message: msg.message, sender: msg.sender }
     socket.broadcast.emit(msg.room, message);
 
