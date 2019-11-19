@@ -17,7 +17,6 @@ const connect = mongoose.connect(url, {
   useNewUrlParser: true
 });
 const db = mongoose.connection
-//db.dropDatabase();
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.log('connected to database'))
 
@@ -80,6 +79,7 @@ socket.on("connection", socket => {
       .then(
         result => {
           if (result == null) {
+
             const newUser = new User(
             {
               _id: msg.userId,
