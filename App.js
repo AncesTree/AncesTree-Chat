@@ -79,6 +79,7 @@ socket.on("connection", socket => {
       .then(
         result => {
           if (result == null) {
+
             const newUser = new User(
             {
               _id: msg.userId,
