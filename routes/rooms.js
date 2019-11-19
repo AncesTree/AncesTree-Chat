@@ -1,6 +1,5 @@
 const express = require("express");
 const Room = require("./../models/Room");
-
 const router = express.Router();
 
 // Get all rooms
@@ -84,9 +83,15 @@ async function getRoom(req, res, next) {
     } catch (err) {
         return res.status(500).json({ message: err.message })
     }
+    /* 
+    Here, we check if the user who send the request is a room's user.
+    We get the id in the body from the Authorization Middleware
+    If you don't use the middleware please comment the following assertion
+    */
     if (!room.users.includes(req.body.id)) {
         return res.status(403).json({ message: err.message })
     }
+
     res.room = room
     next()
 }

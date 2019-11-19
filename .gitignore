@@ -2,6 +2,7 @@
 package-lock.json
 /routes/*.rest
 .env
+/controllers
 
 # Credentials
 .travis/*.key

@@ -1,6 +1,5 @@
 const express = require("express");
 const User = require("../models/User");
-
 const router = express.Router();
 
 // Get all users
@@ -90,5 +89,3 @@ async function getUser(req, res, next) {
 }
 
 module.exports = router;
-
-/* Here for the origin example for this REST api : https://dev.to/beznet/build-a-rest-api-with-node-express-mongodb-4ho4 */

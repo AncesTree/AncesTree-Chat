@@ -1,6 +1,5 @@
 const express = require("express");
 const Message = require("../models/Message");
-
 const router = express.Router();
 
 // Get all messages
@@ -74,5 +73,3 @@ async function getMessage(req, res, next) {
 }
 
 module.exports = router;
-
-/* Here for the origin example for this REST api : https://dev.to/beznet/build-a-rest-api-with-node-express-mongodb-4ho4 */
