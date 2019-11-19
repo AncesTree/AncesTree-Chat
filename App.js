@@ -66,7 +66,7 @@ const User = require("./models/User");
 const Room = require("./models/Room");
 
 socket.on("connection", socket => {
-  const {id} = socket.client;
+  const { id } = socket.client;
   console.log(`User connected : ${id}`);
 
   socket.on("disconnection", function () {
@@ -80,10 +80,16 @@ socket.on("connection", socket => {
       .then(
         result => {
           if (result == null) {
-            const newUser = {}
+            const newUser =
+            {
+              _id: msg.userId,
+              firstName: msg.firstName,
+              lastName: msg.lastName,
+              pseudo: "",
+              rooms: []
+            }
           }
         }
-        
       )
   })
 
@@ -124,7 +130,7 @@ socket.on("connection", socket => {
       )
 
     socket.emit(userToAdd, "You have been added to a conversation");
-    socket.emit(roomToUpdate, { message: `I add a user`, sender: actingUser});
+    socket.emit(roomToUpdate, { message: `I add a user`, sender: actingUser });
 
   });
 
@@ -150,7 +156,7 @@ socket.on("connection", socket => {
       );
 
     socket.emit(userToRemove, "You have been removed from a conversation");
-    socket.emit(roomToUpdate, { message: `I remove a user`, sender: actingUser});
+    socket.emit(roomToUpdate, { message: `I remove a user`, sender: actingUser });
 
   });
 
