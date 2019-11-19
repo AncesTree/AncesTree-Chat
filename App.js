@@ -17,6 +17,7 @@ const connect = mongoose.connect(url, {
   useNewUrlParser: true
 });
 const db = mongoose.connection
+//db.dropDatabase();
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.log('connected to database'))
 
@@ -65,13 +66,34 @@ const User = require("./models/User");
 const Room = require("./models/Room");
 
 socket.on("connection", socket => {
-  console.log(`User connected : ${socket.client}`);
+  const { id } = socket.client;
+  console.log(`User connected : ${id}`);
 
   socket.on("disconnection", function () {
     console.log("User disconnected");
   });
 
-  socket.on("chat message", function (msg) {
+  socket.on("User connected", (msg) => {
+    const userId = msg.userId;
+
+    User.findById(userId)
+      .then(
+        result => {
+          if (result == null) {
+            const newUser =
+            {
+              _id: msg.userId,
+              firstName: msg.firstName,
+              lastName: msg.lastName,
+              pseudo: "",
+              rooms: []
+            }
+          }
+        }
+      )
+  })
+
+  socket.on("chat message", (msg) => {
     const message = { message: msg.message, sender: msg.sender }
     socket.broadcast.emit(msg.room, message);
 
@@ -108,7 +130,7 @@ socket.on("connection", socket => {
       )
 
     socket.emit(userToAdd, "You have been added to a conversation");
-    socket.emit(roomToUpdate, { message: `I add a user`, sender: actingUser});
+    socket.emit(roomToUpdate, { message: `I add a user`, sender: actingUser });
 
   });
 
@@ -134,7 +156,7 @@ socket.on("connection", socket => {
       );
 
     socket.emit(userToRemove, "You have been removed from a conversation");
-    socket.emit(roomToUpdate, { message: `I remove a user`, sender: actingUser});
+    socket.emit(roomToUpdate, { message: `I remove a user`, sender: actingUser });
 
   });
 
