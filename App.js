@@ -12,14 +12,16 @@ const port = 3000;
 const socket = io(http);
 
 // DataBase connection
-const url = process.env.MONGO_DB;
-const connect = mongoose.connect(url, {
-  useNewUrlParser: true
+mongoose.Promise = global.Promise;
+
+mongoose.connect(process.env.MONGO_DB, {
+    useNewUrlParser: true
+}).then(() => {
+    console.log("Successfully connected to the database");    
+}).catch(err => {
+    console.log('Could not connect to the database. Exiting now...', err);
+    process.exit();
 });
-const db = mongoose.connection
-//db.dropDatabase();
-db.on('error', (error) => console.error(error))
-db.once('open', () => console.log('connected to database'))
 
 // Middleware
 app.use(cors());
