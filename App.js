@@ -49,6 +49,9 @@ app.use(function (req, res, next) {
           res.status(403).send('Unauthorized')
         }
       })
+      .catch(e => {
+        res.status(500).send(e);
+      })
   } else {
     next()
   }
