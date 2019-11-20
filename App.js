@@ -16,7 +16,8 @@ mongoose.Promise = global.Promise;
 
 mongoose.connect(process.env.MONGO_DB, {
     useNewUrlParser: true
-}).then(() => {
+}).then(db => {
+    db.dropDatabase();
     console.log("Successfully connected to the database");    
 }).catch(err => {
     console.log('Could not connect to the database. Exiting now...', err);
