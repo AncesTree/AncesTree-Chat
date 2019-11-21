@@ -55,7 +55,7 @@ app.use(function (req, res, next) {
       })
   } else { 
     req.body.id = res.data.id;
-    console.log(req.body);
+    console.log(req.body.id);
     next()
   }
 })
