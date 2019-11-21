@@ -89,8 +89,10 @@ async function getUser(req, res, next) {
     We get the id in the body from the Authorization Middleware
     If you don't use the middleware please comment the following assertion
     */
+   console.log("body : " + req.body);
+   console.log("params : " + req.params);
     if (!(req.body.id == req.params.id)) {
-        return res.status(403).json({ message: err.message })
+        return res.status(403).json({ message: "You can't access this!"})
     }
 
     res.user = user
