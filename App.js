@@ -53,7 +53,7 @@ app.use(function (req, res, next) {
       .catch(e => {
         res.status(500).send();
       })
-  } else {
+  } else { 
     req.body.id = res.data.id
     next()
   }
@@ -79,28 +79,6 @@ socket.on("connection", socket => {
   socket.on("disconnection", function () {
     console.log("User disconnected");
   });
-
-  /* socket.on("User connected", (msg) => {
-    const userId = msg.userId;
-
-    User.findById(userId)
-      .then(
-        result => {
-          if (result == null) {
-
-            const newUser = new User(
-            {
-              _id: msg.userId,
-              firstName: msg.firstName,
-              lastName: msg.lastName,
-              pseudo: "",
-              rooms: []
-            })
-            newUser.save();
-          }
-        }
-      )
-  }) */
 
   socket.on("chat message", (msg) => {
     const message = { message: msg.message, sender: msg.sender }
