@@ -54,12 +54,10 @@ app.use(function (req, res, next) {
         }
       })
       .catch(e => {
-        res.status(500).send();
+        res.status(500).send("Error: Api chat service");
       })
   } else { 
-    console.log("The request was here");
     req.body.id = res.data.id;
-    console.log(req.body.id);
     next()
   }
 })
