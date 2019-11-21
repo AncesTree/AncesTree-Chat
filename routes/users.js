@@ -18,6 +18,7 @@ router.get('/:id', getUser, (req, res) => {
 
 // Create one user
 router.post('/', async (req, res) => {
+    console.log(req.body)
     const user = new User({
         _id: req.body.id,
         firstName: req.body.firstName,
