@@ -4,8 +4,8 @@ AncesTree Chat is a real time chat service for the progressive web app AncesTree
 
 ## Node modules
 
-*mongoose : [https://mongoosejs.com/](Mongoose web site)
-*socket.io : [https://socket.io/](Socket IO web site)
+1. mongoose : [Mongoose web site](https://mongoosejs.com/)
+2. socket.io : [Socket IO web site](https://socket.io/)
 
 ## Routes 
 

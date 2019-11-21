@@ -62,7 +62,7 @@ router.delete('/:id', getRoom, async (req, res) => {
     }
 })
 
-router.get("/populate/:id", getRoom, async (req, res) => {
+router.get("/messages/:id", async (req, res) => {
     try {
         await Room.findById(req.params.id)
             .populate({ path: 'messages users', populate: { path: 'sender' } })
@@ -88,7 +88,7 @@ async function getRoom(req, res, next) {
     We get the id in the body from the Authorization Middleware
     If you don't use the middleware please comment the following assertion
     */
-    if (!room.users.includes(req.body.id)) {
+    if (!room.users.includes(req.data.id)) {
         return res.status(403).json({ message: err.message })
     }
 

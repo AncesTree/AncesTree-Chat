@@ -64,7 +64,7 @@ router.delete('/:id', getUser, async (req, res) => {
     }
 })
 
-router.get("/rooms/:id", getUser, async (req, res) => {
+router.get("/rooms/:id", async (req, res) => {
     try {
         await User.findById(req.params.id).populate("rooms").exec( (err, rooms) => {
             res.json(rooms)
@@ -88,7 +88,7 @@ async function getUser(req, res, next) {
     We get the id in the body from the Authorization Middleware
     If you don't use the middleware please comment the following assertion
     */
-    if (!(req.body.id == req.params.id)) {
+    if (!(req.data.id == req.params.id)) {
         return res.status(403).json({ message: err.message })
     }
 
