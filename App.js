@@ -15,7 +15,8 @@ const socket = io(http);
 mongoose.Promise = global.Promise;
 
 mongoose.connect(process.env.MONGO_DB, {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 }).then(() => {
     console.log("Successfully connected to the database");    
 }).catch(err => {
@@ -78,7 +79,7 @@ socket.on("connection", socket => {
     console.log("User disconnected");
   });
 
-  socket.on("User connected", (msg) => {
+  /* socket.on("User connected", (msg) => {
     const userId = msg.userId;
 
     User.findById(userId)
@@ -98,7 +99,7 @@ socket.on("connection", socket => {
           }
         }
       )
-  })
+  }) */
 
   socket.on("chat message", (msg) => {
     const message = { message: msg.message, sender: msg.sender }
