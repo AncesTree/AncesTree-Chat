@@ -49,7 +49,7 @@ router.patch('/:id', getUser, async (req, res) => {
     try {
         const updatedUser = await res.user.save()
         res.json(updatedUser)
-    } catch {
+    } catch (err) {
         res.status(400).json({ message: err.message })
     }
 })
