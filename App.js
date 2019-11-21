@@ -46,7 +46,7 @@ app.use(function (req, res, next) {
       .then((result) => {
         if (result.status === 200) {
           console.log("The request was here");
-          req.body.id = res.data.id;
+          req.body.id = result.data.id;
           console.log(req.body.id);
           return next()
         } else {
@@ -57,7 +57,6 @@ app.use(function (req, res, next) {
         res.status(500).send("Error: Api chat service");
       })
   } else { 
-    req.body.id = res.data.id;
     next()
   }
 })
