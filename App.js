@@ -45,6 +45,9 @@ app.use(function (req, res, next) {
     })
       .then((result) => {
         if (result.status === 200) {
+          console.log("The request was here");
+          req.body.id = res.data.id;
+          console.log(req.body.id);
           return next()
         } else {
           res.status(403).send('Unauthorized')
