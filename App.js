@@ -54,6 +54,7 @@ app.use(function (req, res, next) {
         res.status(500).send();
       })
   } else { 
+    console.log("The request was here");
     req.body.id = res.data.id;
     console.log(req.body.id);
     next()
