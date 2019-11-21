@@ -83,6 +83,14 @@ async function getUser(req, res, next) {
     } catch (err) {
         return res.status(500).json({ message: err.message })
     }
+    /* 
+    Here, we check if the user who send the request is a the concern user.
+    We get the id in the body from the Authorization Middleware
+    If you don't use the middleware please comment the following assertion
+    */
+    if (!(req.body.id == req.params.id)) {
+        return res.status(403).json({ message: err.message })
+    }
 
     res.user = user
     next()
