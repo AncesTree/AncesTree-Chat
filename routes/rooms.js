@@ -1,5 +1,6 @@
 const express = require("express");
 const Room = require("./../models/Room");
+const User = require("./../models/User");
 const router = express.Router();
 
 // Get all rooms
@@ -25,6 +26,18 @@ router.post('/', async (req, res) => {
     });
     try {
         const newRoom = await room.save();
+        req.body.users.forEach(element => {
+            try {
+                const user = await User.findById(element);
+                if (user==null) {
+                    return res.status(404).json({message: "Can't find user"});
+                }
+                user.rooms = [...user.rooms, newRoom];
+                user.save();
+            } catch (err) {
+                return res.status(500).json({ message: err.message })
+            }
+        });
         res.status(201).json(newRoom)
     } catch (err) {
         res.status(400).json({ message: err.message })
