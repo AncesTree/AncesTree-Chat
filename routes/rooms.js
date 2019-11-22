@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
         const newRoom = await room.save();
         req.body.users.forEach(element => {
             try {
-               updateUser(element);
+               updateUser(element, newRoom._id);
             } catch (err) {
                 return res.status(500).json({ message: err.message })
             }
@@ -39,12 +39,12 @@ router.post('/', async (req, res) => {
     }
 });
 
-async function updateUser(id) {
-    const user = await User.findById(element);
+async function updateUser(userId, roomId) {
+    const user = await User.findById(userId);
     if (user==null) {
         return res.status(404).json({message: "Can't find user"});
     }
-    user.rooms = [...user.rooms, newRoom];
+    user.rooms = [...user.rooms, roomId];
     user.save();
     return user;
 }
