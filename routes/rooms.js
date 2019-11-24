@@ -41,14 +41,11 @@ router.post('/', async (req, res) => {
 });
 
 async function updateUser(userId, roomId) {
-    console.log(userId)
     const user = await User.findById(userId);
-    console.log(user)
     if (user==null) {
         return res.status(404).json({message: "Can't find user"});
     }
     user.rooms = [...user.rooms, roomId];
-    console.log(user)
     user.save();
     return user;
 }
